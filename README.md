@@ -1,0 +1,2 @@
+# FourSquare-Venue-Explore-Function
+I'm having fun building these functions. I designed this function for use with FourSquare API Venue's Explore. Instead of returning all the venues in the area, it returns the recommended ones instead. I designed it to loop through each neighborhood, just like Venue's Search. NOTE: I designed this function for academic purposes only. Check API time rate before use.
