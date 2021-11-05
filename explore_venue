@@ -1,0 +1,43 @@
+def venue_explore(HOOD, LAT, LNG, CLIENT_ID, CLIENT_SECRET, VERSION, RADIUS, LIMIT):
+
+    venues_list = []
+
+    global venues_df
+    
+    for hood, lat, lng in zip(HOOD, LAT, LNG):
+        url = 'https://api.foursquare.com/v2/venues/explore?client_id={}&client_secret={}&v={}&radius={}&limit={}&ll={},{}'.format(CLIENT_ID, CLIENT_SECRET, VERSION, RADIUS, LIMIT, lat, lng)
+        request = requests.get(url).json()
+        results = request['response']['groups'][0]['items']
+        
+        for venues in results:
+            
+            sub_list = []
+
+            sub_list.append(hood)
+            sub_list.append(lat)
+            sub_list.append(lng)
+    
+            sub_list.append(venues['venue']['name'])
+            if not venues['venue']['name']:
+                sub_list.append('No Name')
+    
+            sub_list.append(venues['venue']['location']['lat'])
+            if not venues['venue']['location']['lat']:
+                sub_list.append('No Latitude')
+
+            sub_list.append(venues['venue']['location']['lng'])
+            if not venues['venue']['location']['lng']:
+                sub_list.append('No Longitude')
+
+            for name in venues['venue']['categories']:
+                sub_list.append(name['name'])
+            if not venues['venue']['categories']:
+                sub_list.append('No Category')
+           
+            venues_list.append(sub_list)
+    
+    venues_df = pd.DataFrame(venues_list)
+    
+    venues_df.columns = ['Neighborhood', 'Latitude', 'Longitude', 'Venue Name', 'Venue Latitude', 'Venue Longitude', 'Venue Category']
+
+    return(venues_df)
